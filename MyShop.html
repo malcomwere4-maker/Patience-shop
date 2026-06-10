@@ -1,0 +1,1292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<meta name="apple-mobile-web-app-title" content="Patience Retail"/>
+<meta name="theme-color" content="#0f1923"/>
+<title>Patience Retail Store</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{font-family:Georgia,serif;background:#0f1923;color:#e8dcc8;min-height:100vh;padding-bottom:90px;overscroll-behavior:none}
+input,select,button{font-family:Georgia,serif;outline:none}
+.header{background:linear-gradient(135deg,#1a2f1e,#0f1923);border-bottom:2px solid #2d6a4f;padding:16px 14px 12px}
+.header-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.brand{display:flex;align-items:center;gap:10px}
+.brand-icon{font-size:24px}
+.brand-name{font-size:17px;font-weight:bold;color:#74c69d;line-height:1.2}
+.brand-sub{font-size:10px;color:#8a9ba8;margin-top:1px}
+.log-btn{background:#1e3a2f;border:1px solid #2d6a4f;border-radius:8px;color:#74c69d;padding:7px 11px;font-size:12px;cursor:pointer}
+.sgrid{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:6px}
+.sc{background:rgba(255,255,255,0.05);border-radius:8px;padding:8px 4px;text-align:center;border:1px solid rgba(255,255,255,0.07)}
+.sc-l{font-size:9px;color:#8a9ba8;margin-bottom:3px}
+.sc-v{font-size:11px;font-weight:bold}
+.tabs{display:flex;background:#111d26;border-bottom:1px solid #1e3a2f;overflow-x:auto}
+.tabs::-webkit-scrollbar{display:none}
+.tab{flex-shrink:0;flex:1;min-width:60px;padding:12px 4px;background:none;border:none;color:#5a7a6a;font-size:11px;border-bottom:3px solid transparent;cursor:pointer;font-family:Georgia,serif;white-space:nowrap}
+.tab.active{color:#74c69d;font-weight:bold;border-bottom:3px solid #74c69d}
+.content{padding:13px 12px}
+.hidden{display:none!important}
+.btn-green{background:#2d6a4f;border:none;color:#fff;font-size:13px;font-weight:bold;padding:11px;border-radius:10px;cursor:pointer;font-family:Georgia,serif;flex:1}
+.btn-outline{background:#1e3a2f;border:1px solid #2d6a4f;color:#f2cc8f;font-size:12px;padding:11px 12px;border-radius:10px;cursor:pointer;font-family:Georgia,serif}
+.btn-save{width:100%;padding:12px;background:#52b788;border:none;border-radius:8px;color:#0f1923;font-weight:bold;font-size:14px;cursor:pointer;font-family:Georgia,serif;margin-top:4px}
+.btn-sm-edit{background:#1e3a2f;border:1px solid #2d6a4f;border-radius:6px;color:#74c69d;padding:5px 8px;font-size:12px;cursor:pointer}
+.btn-sm-del{background:#2f1a1a;border:1px solid #6a2d2d;border-radius:6px;color:#e07a5f;padding:5px 8px;font-size:12px;cursor:pointer}
+.btn-sm-rst{background:#1e3a2f;border:1px solid #52b788;border-radius:6px;color:#52b788;padding:5px 8px;font-size:12px;cursor:pointer}
+.form-box{background:#1a2f1e;border:1px solid #2d6a4f;border-radius:12px;padding:14px;margin-bottom:13px}
+.form-box h3{font-size:13px;color:#74c69d;margin-bottom:12px}
+.field{margin-bottom:10px}
+.fl{font-size:11px;color:#74c69d;font-weight:bold;margin-bottom:2px;display:block}
+.fh{font-size:10px;color:#8a9ba8;margin-bottom:4px;display:block}
+.inp{width:100%;padding:10px 12px;background:#0a1520;border:1px solid #2d6a4f;border-radius:8px;color:#e8dcc8;font-size:14px;font-family:Georgia,serif}
+.inp:focus{border-color:#52b788}
+.row-btns{display:flex;gap:8px;margin-bottom:13px}
+/* SOURCE SELECTOR */
+.src-label{font-size:11px;color:#74c69d;font-weight:bold;margin-bottom:6px;display:block}
+.src-hint{font-size:10px;color:#8a9ba8;margin-bottom:8px;display:block}
+.src-btns{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:4px}
+.src-btn{padding:12px 8px;border-radius:10px;border:2px solid #2d6a4f;background:#1e3a2f;color:#8a9ba8;font-size:12px;cursor:pointer;text-align:center;transition:all .2s;font-family:Georgia,serif;line-height:1.5}
+.src-btn.selected-int{border-color:#52b788;background:#1a3f2a;color:#74c69d;font-weight:bold}
+.src-btn.selected-ext{border-color:#f2cc8f;background:#2a2a1a;color:#f2cc8f;font-weight:bold}
+/* ITEM CARDS */
+.item-card{background:#141f2a;border-radius:12px;margin-bottom:10px;border:1px solid #1e3a2f}
+.item-card.low{border-color:#5a4a1a}
+.item-card.out{border-color:#6a2d2d}
+.item-inner{padding:12px}
+.item-top{display:flex;justify-content:space-between;align-items:flex-start}
+.item-name{font-size:15px;font-weight:bold;color:#e8dcc8}
+.item-meta{font-size:11px;color:#8a9ba8;margin-top:2px}
+.item-btns{display:flex;gap:5px;margin-left:8px;flex-shrink:0}
+.prog-info{display:flex;justify-content:space-between;font-size:11px;color:#8a9ba8;margin:10px 0 4px}
+.prog-bar{height:6px;background:#1e3a2f;border-radius:3px}
+.prog-fill{height:100%;border-radius:3px;transition:width .4s}
+.sell-row{display:flex;gap:7px;margin-top:10px}
+.sell-inp{flex:1;padding:9px 10px;background:#0a1520;border:1px solid #2d6a4f;border-radius:8px;color:#e8dcc8;font-size:14px;font-family:Georgia,serif}
+.btn-sell{padding:9px 16px;background:#2d6a4f;border:none;border-radius:8px;color:#74c69d;font-weight:bold;font-size:13px;cursor:pointer;font-family:Georgia,serif}
+.out-badge{margin-top:10px;text-align:center;font-size:13px;color:#e07a5f;padding:7px;background:#e07a5f11;border-radius:6px}
+/* BOXES */
+.sbox{background:#1a2f1e;border:1px solid #2d6a4f;border-radius:12px;padding:14px;margin-bottom:13px}
+.sbox-dark{background:#141f2a;border:1px solid #1e3a2f;border-radius:12px;padding:14px;margin-bottom:13px}
+.sbox h3,.sbox-dark h3{font-size:13px;color:#74c69d;font-weight:bold;margin-bottom:12px}
+.sum-row{display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid #1e3a2f}
+.sum-row:last-child{border-bottom:none}
+.sum-lbl{font-size:12px;color:#8a9ba8;flex:1;padding-right:8px}
+.sum-val{font-size:13px;font-weight:bold}
+/* CAPITAL CARDS */
+.cap-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:13px}
+.cap-card{background:#141f2a;border-radius:10px;padding:12px;border:1px solid #1e3a2f;text-align:center}
+.cap-card.highlight{background:#1a2f1e;border-color:#2d6a4f}
+.cap-val{font-size:16px;font-weight:bold;margin-bottom:4px}
+.cap-lbl{font-size:10px;color:#8a9ba8;line-height:1.4}
+/* PURCHASE LOG */
+.pur-entry{background:#141f2a;border-radius:8px;padding:10px 12px;margin-bottom:7px;border-left:3px solid #2d6a4f}
+.pur-entry.ext{border-left-color:#f2cc8f}
+.pur-entry.int{border-left-color:#52b788}
+.src-badge{display:inline-block;font-size:10px;padding:2px 8px;border-radius:10px;font-weight:bold}
+.src-badge.ext{background:#2a2a1a;color:#f2cc8f;border:1px solid #8a6a1a}
+.src-badge.int{background:#1a2f1e;color:#52b788;border:1px solid #2d6a4f}
+/* PTABS */
+.ptabs{display:flex;gap:6px;margin-bottom:14px;overflow-x:auto;padding-bottom:2px}
+.ptabs::-webkit-scrollbar{display:none}
+.ptab{padding:7px 13px;border-radius:20px;font-size:12px;border:1px solid #2d6a4f;background:#1e3a2f;color:#8a9ba8;cursor:pointer;white-space:nowrap;font-family:Georgia,serif}
+.ptab.active{background:#2d6a4f;color:#74c69d;font-weight:bold;border-color:#52b788}
+/* REPORTS */
+.rstat-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:13px}
+.rstat{background:#141f2a;border-radius:10px;padding:12px;border:1px solid #1e3a2f;text-align:center}
+.rstat-v{font-size:17px;font-weight:bold;margin-bottom:4px}
+.rstat-l{font-size:11px;color:#8a9ba8}
+.chart-item{margin-bottom:8px}
+.chart-top{display:flex;justify-content:space-between;font-size:12px;margin-bottom:3px}
+.chart-bg{height:8px;background:#1e3a2f;border-radius:4px}
+.chart-fill{height:100%;border-radius:4px;background:linear-gradient(90deg,#2d6a4f,#52b788);transition:width .5s}
+/* PROFIT */
+.profit-item{background:#141f2a;border-radius:10px;padding:11px 13px;margin-bottom:7px;display:flex;justify-content:space-between;align-items:center;border:1px solid #1e3a2f}
+/* EXPENSES */
+.exp-item{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid #1e3a2f}
+.exp-item:last-of-type{border-bottom:none}
+/* STATUS */
+.status-box{border-radius:12px;padding:14px;margin-bottom:13px}
+.st-good{background:#1a2f1e;border:1px solid #2d6a4f}
+.st-bad{background:#2f1a1a;border:1px solid #6a2d2d}
+/* MODALS */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,0.88);z-index:200;display:flex;align-items:center;justify-content:center;padding:16px}
+.modal{background:#1a2f1e;border-radius:14px;padding:18px;width:100%;max-width:360px;border:1px solid #2d6a4f;max-height:92vh;overflow-y:auto}
+.modal h3{font-size:15px;font-weight:bold;color:#74c69d;margin-bottom:14px}
+.del-modal{background:#2f1a1a;border-radius:14px;padding:20px;width:100%;max-width:300px;text-align:center;border:1px solid #6a2d2d}
+.modal-btns{display:flex;gap:8px;margin-top:8px}
+.btn-cancel{flex:1;padding:11px;background:#1e3a2f;border:1px solid #2d6a4f;border-radius:8px;color:#8a9ba8;cursor:pointer;font-family:Georgia,serif}
+.btn-del-ok{flex:1;padding:11px;background:#e07a5f;border:none;border-radius:8px;color:#fff;font-weight:bold;cursor:pointer;font-family:Georgia,serif}
+/* LOG */
+.log-full{position:fixed;inset:0;background:#0f1923;z-index:200;display:flex;flex-direction:column}
+.log-hdr{display:flex;justify-content:space-between;align-items:center;padding:14px;border-bottom:1px solid #1e3a2f;flex-shrink:0}
+.log-hdr h3{font-size:16px;font-weight:bold;color:#74c69d}
+.log-close{background:#2d6a4f;border:none;border-radius:8px;color:#fff;padding:8px 16px;cursor:pointer;font-family:Georgia,serif}
+.log-body{flex:1;overflow:auto;padding:12px}
+.log-entry{background:#141f2a;border-radius:8px;padding:10px 12px;margin-bottom:7px;border:1px solid #1e3a2f}
+.date-hdr{font-size:12px;font-weight:bold;color:#74c69d;background:#1a2f1e;padding:6px 10px;border-radius:6px;margin:10px 0 6px;border-left:3px solid #52b788}
+/* TOAST */
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);padding:11px 22px;border-radius:30px;font-size:13px;font-weight:bold;z-index:999;box-shadow:0 4px 20px rgba(0,0,0,.5);white-space:nowrap;font-family:Georgia,serif;pointer-events:none}
+.toast-s{background:#52b788;color:#fff}
+.toast-e{background:#e07a5f;color:#fff}
+.sec-title{font-size:13px;color:#74c69d;font-weight:bold;margin-bottom:10px}
+.cycle-badge{display:inline-block;font-size:10px;background:#2d6a4f33;color:#52b788;padding:2px 7px;border-radius:10px;border:1px solid #2d6a4f;margin-left:6px}
+.new-cycle-note{background:#1e3a2f;border:1px solid #52b788;border-radius:8px;padding:9px 12px;font-size:12px;color:#74c69d;margin-bottom:10px}
+.warn-note{background:#2f1e0a;border:1px solid #8a6a1a;border-radius:8px;padding:9px 12px;font-size:12px;color:#f2cc8f;margin-bottom:10px}
+.empty-state{text-align:center;color:#8a9ba8;padding:30px 20px;font-size:14px}
+.divider-title{font-size:12px;color:#8a9ba8;text-align:center;padding:6px 0;margin:4px 0 10px;border-top:1px solid #1e3a2f;border-bottom:1px solid #1e3a2f;background:#111d26}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-top">
+    <div class="brand">
+      <span class="brand-icon">🏪</span>
+      <div><div class="brand-name">Patience Retail Store</div><div class="brand-sub">Stock &amp; Profit Tracker</div></div>
+    </div>
+    <button class="log-btn" onclick="openLog()">📋 Log</button>
+  </div>
+  <div class="sgrid">
+    <div class="sc"><div class="sc-l">Cash in Hand</div><div class="sc-v" style="color:#52b788" id="hd-cash">-</div></div>
+    <div class="sc"><div class="sc-l">Stock Value</div><div class="sc-v" style="color:#74c69d" id="hd-stock">-</div></div>
+    <div class="sc"><div class="sc-l">Total Worth</div><div class="sc-v" style="color:#f2cc8f" id="hd-worth">-</div></div>
+    <div class="sc"><div class="sc-l">Net Profit</div><div class="sc-v" style="color:#52b788" id="hd-profit">-</div></div>
+  </div>
+</div>
+
+<!-- TABS -->
+<div class="tabs">
+  <button class="tab active" onclick="switchTab('stock',this)">📦 Stock</button>
+  <button class="tab" onclick="switchTab('capital',this)">💼 Capital</button>
+  <button class="tab" onclick="switchTab('reports',this)">📊 Reports</button>
+  <button class="tab" onclick="switchTab('profit',this)">💰 Profit</button>
+  <button class="tab" onclick="switchTab('expenses',this)">🏠 Expenses</button>
+</div>
+
+<!-- ══════════════ STOCK TAB ══════════════ -->
+<div id="tab-stock" class="content">
+  <div class="row-btns">
+    <button class="btn-green" id="add-btn" onclick="toggleAddForm()">+ Add New Item</button>
+    <button class="btn-outline" onclick="askNewCycle()">🔄 New Cycle</button>
+  </div>
+  <div id="add-form" class="form-box hidden">
+    <h3>📦 Add New Stock Item</h3>
+    <div class="field">
+      <label class="fl">Item Name <span style="color:#e07a5f">*</span></label>
+      <span class="fh">What is the product called? (e.g. Soda, Sugar, Biscuit)</span>
+      <input class="inp" id="new-name" placeholder="e.g. Soda"/>
+    </div>
+    <div class="field">
+      <label class="fl">Total Quantity Bought <span style="color:#e07a5f">*</span></label>
+      <span class="fh">How many pieces/bottles/packets did you buy? (e.g. 12 bottles in one crate)</span>
+      <input class="inp" id="new-qty" type="number" min="1" placeholder="e.g. 12" oninput="updateNewPreview()"/>
+    </div>
+    <div class="field">
+      <label class="fl">Total Buying Price (UGX) <span style="color:#e07a5f">*</span></label>
+      <span class="fh">How much did you pay for ALL the items together? (e.g. whole crate = 10,000)</span>
+      <input class="inp" id="new-buy" type="number" min="0" placeholder="e.g. 10000" oninput="updateNewPreview()"/>
+    </div>
+    <div class="field">
+      <label class="fl">Selling Price per Item (UGX) <span style="color:#e07a5f">*</span></label>
+      <span class="fh">How much do you sell ONE item for? Can be changed anytime if price rises or falls</span>
+      <input class="inp" id="new-sell" type="number" min="0" placeholder="e.g. 1000" oninput="updateNewPreview()"/>
+    </div>
+    <!-- SOURCE SELECTOR -->
+    <div class="field">
+      <label class="fl">Expiry Date (Optional)</label>
+      <span class="fh">Does this product expire or go bad? If yes, enter the expiry date so you get a warning in time.</span>
+      <input class="inp" id="new-expiry" type="date"/>
+    </div>
+    <div class="field">
+      <label class="src-label">💵 Where did the money come from? <span style="color:#e07a5f">*</span></label>
+      <span class="src-hint">This helps us track your cash correctly</span>
+      <div class="src-btns">
+        <button type="button" class="src-btn" id="new-src-int" onclick="setNewSrc('internal')">
+          💵 Business Revenue<br/><span style="font-size:10px;font-weight:normal;opacity:.8">Money earned from sales already in the shop</span>
+        </button>
+        <button type="button" class="src-btn" id="new-src-ext" onclick="setNewSrc('external')">
+          💰 New Money<br/><span style="font-size:10px;font-weight:normal;opacity:.8">Money from outside — savings, home, borrowed</span>
+        </button>
+      </div>
+    </div>
+    <div id="new-preview" style="display:none;background:#0a1520;border-radius:8px;padding:10px 12px;margin-bottom:8px;font-size:12px;color:#8a9ba8;line-height:1.8"></div>
+    <button class="btn-save" onclick="addItem()">✓ Add Item to Stock</button>
+  </div>
+  <div id="stock-list"></div>
+</div>
+
+<!-- ══════════════ CAPITAL TAB ══════════════ -->
+<div id="tab-capital" class="content hidden">
+  <div class="cap-grid" id="cap-cards"></div>
+
+  <button onclick="printReport()" style="width:100%;padding:13px;background:linear-gradient(135deg,#2d6a4f,#1a4a34);border:none;border-radius:10px;color:#fff;font-size:14px;font-weight:bold;cursor:pointer;font-family:Georgia,serif;margin-bottom:13px;letter-spacing:.5px">
+    🖨️ Print / Save PDF Report
+  </button>
+
+  <div class="sbox">
+    <h3>📊 Capital Breakdown</h3>
+    <div id="cap-breakdown"></div>
+  </div>
+
+  <div class="sbox-dark">
+    <h3>💡 How This Works</h3>
+    <div style="font-size:12px;color:#8a9ba8;line-height:1.9">
+      <strong style="color:#f2cc8f">💰 External Capital</strong> = Money you brought from outside (savings, borrowed, etc.)<br/>
+      <strong style="color:#52b788">💵 Cash in Hand</strong> = Revenue earned minus money reinvested from business<br/>
+      <strong style="color:#74c69d">📦 Stock Value</strong> = Current stock at buying cost<br/>
+      <strong style="color:#f2cc8f">🏪 Total Worth</strong> = Cash + Stock Value<br/>
+      <strong style="color:#52b788">📈 Net Profit</strong> = Total Worth minus External Capital you put in
+    </div>
+  </div>
+
+  <div class="sec-title">📋 Purchase History</div>
+  <div id="purchase-log"></div>
+</div>
+
+<!-- ══════════════ REPORTS TAB ══════════════ -->
+<div id="tab-reports" class="content hidden">
+  <div class="ptabs">
+    <button class="ptab active" onclick="setPeriod('today',this)">📅 Today</button>
+    <button class="ptab" onclick="setPeriod('week',this)">📆 This Week</button>
+    <button class="ptab" onclick="setPeriod('month',this)">🗓️ This Month</button>
+    <button class="ptab" onclick="setPeriod('year',this)">📅 This Year</button>
+    <button class="ptab" onclick="setPeriod('all',this)">🗂️ All Time</button>
+  </div>
+  <div id="r-period-lbl" style="font-size:12px;color:#8a9ba8;margin-bottom:12px;text-align:center"></div>
+  <div class="rstat-grid">
+    <div class="rstat"><div class="rstat-v" style="color:#74c69d" id="r-rev">0</div><div class="rstat-l">Revenue (UGX)</div></div>
+    <div class="rstat"><div class="rstat-v" style="color:#52b788" id="r-profit">0</div><div class="rstat-l">Profit (UGX)</div></div>
+    <div class="rstat"><div class="rstat-v" style="color:#f2cc8f" id="r-tx">0</div><div class="rstat-l">Transactions</div></div>
+    <div class="rstat"><div class="rstat-v" style="color:#81b29a" id="r-units">0</div><div class="rstat-l">Units Sold</div></div>
+  </div>
+  <div class="sbox-dark"><h3>🏆 Top Selling Items</h3><div id="r-chart"></div></div>
+  <div class="sbox-dark"><h3>📋 Item Breakdown</h3><div id="r-breakdown"></div></div>
+  <div class="sbox-dark"><h3>📅 Daily Sales (Last 14 Days)</h3><div id="r-daily"></div></div>
+</div>
+
+<!-- ══════════════ PROFIT TAB ══════════════ -->
+<div id="tab-profit" class="content hidden">
+  <div class="sbox"><h3>📊 Overall Summary</h3><div id="profit-summary"></div></div>
+  <div class="sec-title">📋 Per Item — Best Margin First</div>
+  <div id="profit-list"></div>
+</div>
+
+<!-- ══════════════ EXPENSES TAB ══════════════ -->
+<div id="tab-expenses" class="content hidden">
+  <div class="sbox">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+      <h3 style="margin:0">🏠 Monthly Expenses</h3>
+      <button class="btn-sm-edit" onclick="openAddExp()">+ Add</button>
+    </div>
+    <div id="exp-list"></div>
+    <div style="display:flex;justify-content:space-between;padding-top:10px;margin-top:4px;border-top:1px solid #2d6a4f">
+      <span style="font-size:13px;font-weight:bold;color:#e8dcc8">Total Monthly</span>
+      <span style="font-size:14px;font-weight:bold;color:#e07a5f" id="exp-total">0 UGX</span>
+    </div>
+  </div>
+  <div class="sbox-dark"><h3>📈 Break-Even Analysis</h3><div id="breakeven"></div></div>
+  <div id="status-box" style="margin-bottom:13px"></div>
+  <div class="sbox-dark"><h3>📆 Monthly Forecast</h3><div id="forecast"></div></div>
+</div>
+
+<!-- ══════════════ SALES LOG ══════════════ -->
+<div id="log-overlay" class="log-full hidden">
+  <div class="log-hdr">
+    <h3>📋 Sales Log</h3>
+    <button class="log-close" onclick="closeLog()">Close</button>
+  </div>
+  <div class="log-body">
+    <div class="ptabs" style="margin-bottom:10px">
+      <button class="ptab active" onclick="setLogFilter('today',this)">📅 Daily</button>
+      <button class="ptab" onclick="setLogFilter('week',this)">📆 Weekly</button>
+      <button class="ptab" onclick="setLogFilter('month',this)">🗓️ Monthly</button>
+      <button class="ptab" onclick="setLogFilter('year',this)">📅 Annual</button>
+      <button class="ptab" onclick="setLogFilter('all',this)">🗂️ All</button>
+    </div>
+    <div id="log-summary" style="background:#1a2f1e;border-radius:8px;padding:10px 14px;margin-bottom:12px;display:flex;justify-content:space-between"></div>
+    <div id="log-list"></div>
+  </div>
+</div>
+
+<!-- RESTOCK MODAL -->
+<div id="rst-modal" class="overlay hidden">
+  <div class="modal">
+    <h3 id="rst-title">🔄 Restock Item</h3>
+    <input type="hidden" id="rst-id"/>
+    <div id="rst-note"></div>
+    <div class="field">
+      <label class="fl">Quantity to Add <span style="color:#e07a5f">*</span></label>
+      <span class="fh" id="rst-qty-hint">How many new items are you adding?</span>
+      <input class="inp" id="rst-qty" type="number" min="1" placeholder="e.g. 12" oninput="updateRstPreview()"/>
+    </div>
+    <div class="field">
+      <label class="fl">Total Buying Price for ALL Items (UGX) <span style="color:#e07a5f">*</span></label>
+      <span class="fh">How much did you pay for all the items together? (e.g. 1 crate of 12 = 10,000). Cost per item will be calculated automatically.</span>
+      <input class="inp" id="rst-price" type="number" min="0" placeholder="e.g. 10000" oninput="updateRstPreview()"/>
+    </div>
+    <div id="rst-cpi-display" style="display:none;background:#0a1520;border-radius:6px;padding:8px 12px;margin-bottom:8px;font-size:12px;color:#8a9ba8;border:1px solid #2d6a4f"></div>
+    <!-- SOURCE -->
+    <div class="field">
+      <label class="fl">Update Expiry Date (Optional)</label>
+      <span class="fh">If this new batch has a different expiry date, enter it here</span>
+      <input class="inp" id="rst-expiry" type="date"/>
+    </div>
+    <div class="field">
+      <label class="src-label">💵 Where did the money come from? <span style="color:#e07a5f">*</span></label>
+      <span class="src-hint">This helps track your cash balance correctly</span>
+      <div class="src-btns">
+        <button type="button" class="src-btn" id="rst-src-int" onclick="setRstSrc('internal')">
+          💵 Business Revenue<br/><span style="font-size:10px;font-weight:normal;opacity:.8">Money earned from sales in the shop</span>
+        </button>
+        <button type="button" class="src-btn" id="rst-src-ext" onclick="setRstSrc('external')">
+          💰 New Money<br/><span style="font-size:10px;font-weight:normal;opacity:.8">Money from outside — savings, home, borrowed</span>
+        </button>
+      </div>
+    </div>
+    <div id="rst-preview" style="background:#0a1520;border-radius:8px;padding:10px 12px;margin-bottom:8px;font-size:12px;color:#8a9ba8;line-height:1.8;display:none"></div>
+    <div class="modal-btns">
+      <button class="btn-cancel" onclick="closeRst()">Cancel</button>
+      <button class="btn-save" style="flex:2;margin:0;padding:11px" id="rst-save-btn" onclick="doRestock()">Confirm Restock</button>
+    </div>
+  </div>
+</div>
+
+<!-- QUICK PRICE EDIT MODAL -->
+<div id="price-modal" class="overlay hidden">
+  <div class="modal">
+    <h3>💰 Update Selling Price</h3>
+    <input type="hidden" id="price-id"/>
+    <div style="background:#0a1520;border-radius:8px;padding:10px 12px;margin-bottom:14px;font-size:13px;color:#8a9ba8;line-height:1.8" id="price-info"></div>
+    <div class="field">
+      <label class="fl">New Selling Price per Item (UGX) <span style="color:#e07a5f">*</span></label>
+      <span class="fh">Enter the new price you want to charge customers</span>
+      <input class="inp" id="price-new" type="number" min="0" placeholder="e.g. 1200" oninput="updatePricePreview()"/>
+    </div>
+    <div id="price-preview" style="background:#1a2f1e;border-radius:8px;padding:10px 12px;margin-bottom:8px;font-size:12px;color:#8a9ba8;line-height:1.9;display:none"></div>
+    <div class="modal-btns">
+      <button class="btn-cancel" onclick="closePriceEdit()">Cancel</button>
+      <button class="btn-save" style="flex:2;margin:0;padding:11px" onclick="savePriceEdit()">Update Price ✓</button>
+    </div>
+  </div>
+</div>
+
+<!-- EDIT MODAL -->
+<div id="edit-modal" class="overlay hidden">
+  <div class="modal">
+    <h3>✏️ Edit Item</h3>
+    <input type="hidden" id="edit-id"/>
+    <div class="field">
+      <label class="fl">Item Name</label>
+      <input class="inp" id="edit-name"/>
+    </div>
+    <div class="field">
+      <label class="fl">Total Quantity (Current Stock)</label>
+      <span class="fh">Total pieces you have right now</span>
+      <input class="inp" id="edit-qty" type="number"/>
+    </div>
+    <div class="field">
+      <label class="fl">Buying Price per Item (UGX)</label>
+      <span class="fh">How much you paid per item for this stock</span>
+      <input class="inp" id="edit-cpi" type="number"/>
+    </div>
+    <div class="field">
+      <label class="fl">Selling Price per Item (UGX)</label>
+      <span class="fh">How much you charge customers per item</span>
+      <input class="inp" id="edit-sell" type="number"/>
+    </div>
+    <div class="modal-btns">
+      <button class="btn-cancel" onclick="closeEdit()">Cancel</button>
+      <button class="btn-save" style="flex:2;margin:0;padding:11px" onclick="saveEdit()">Save Changes</button>
+    </div>
+  </div>
+</div>
+
+<!-- DELETE MODAL -->
+<div id="del-modal" class="overlay hidden">
+  <div class="del-modal">
+    <div style="font-size:28px;margin-bottom:10px">🗑️</div>
+    <div style="font-size:15px;font-weight:bold;color:#e07a5f;margin-bottom:6px" id="del-title">Delete item?</div>
+    <div style="font-size:12px;color:#8a9ba8;margin-bottom:16px">This cannot be undone.</div>
+    <div class="modal-btns">
+      <button class="btn-cancel" onclick="closeDel()">Cancel</button>
+      <button class="btn-del-ok" onclick="doDelete()">Delete</button>
+    </div>
+  </div>
+</div>
+
+<!-- ADD EXPENSE MODAL -->
+<div id="exp-modal" class="overlay hidden">
+  <div class="modal">
+    <h3 id="exp-modal-title">➕ Add Expense</h3>
+    <input type="hidden" id="exp-edit-id"/>
+    <div class="field">
+      <label class="fl">Expense Name <span style="color:#e07a5f">*</span></label>
+      <span class="fh">What is this expense? (e.g. Rent, Electricity, Water, Packaging)</span>
+      <input class="inp" id="exp-name" placeholder="e.g. Shop Rent"/>
+    </div>
+    <div class="field">
+      <label class="fl">Amount per Month (UGX) <span style="color:#e07a5f">*</span></label>
+      <span class="fh">How much do you pay for this every month?</span>
+      <input class="inp" id="exp-amount" type="number" min="0" placeholder="e.g. 60000"/>
+    </div>
+    <div class="modal-btns">
+      <button class="btn-cancel" onclick="closeExpModal()">Cancel</button>
+      <button class="btn-save" style="flex:2;margin:0;padding:11px" onclick="saveExpense()">Save Expense</button>
+    </div>
+  </div>
+</div>
+
+<!-- LOSS / SPOILAGE MODAL -->
+<div id="loss-modal" class="overlay hidden">
+  <div class="modal">
+    <h3>⚠️ Record Loss / Spoilage</h3>
+    <input type="hidden" id="loss-id"/>
+    <div id="loss-item-info" style="background:#2f1a1a;border:1px solid #6a2d2d;border-radius:8px;padding:10px 12px;margin-bottom:14px;font-size:12px;color:#e07a5f;line-height:1.8"></div>
+    <div class="field">
+      <label class="fl">How many items are lost/expired/gone bad? <span style="color:#e07a5f">*</span></label>
+      <span class="fh">Enter the number of items you cannot sell anymore</span>
+      <input class="inp" id="loss-qty" type="number" min="1" placeholder="e.g. 3" oninput="updateLossPreview()"/>
+    </div>
+    <div class="field">
+      <label class="fl">Reason</label>
+      <span class="fh">Why are these items being lost?</span>
+      <select class="inp" id="loss-reason">
+        <option value="expired">📅 Expired (reached expiry date)</option>
+        <option value="spoiled">🤢 Spoiled / Gone bad</option>
+        <option value="damaged">💥 Damaged / Broken</option>
+        <option value="stolen">🚨 Stolen / Missing</option>
+        <option value="other">❓ Other reason</option>
+      </select>
+    </div>
+    <div id="loss-preview" style="background:#2f1a1a;border-radius:8px;padding:10px 12px;margin-bottom:8px;font-size:12px;color:#e07a5f;line-height:1.8;display:none"></div>
+    <div class="modal-btns">
+      <button class="btn-cancel" onclick="closeLoss()">Cancel</button>
+      <button style="flex:2;padding:11px;background:#e07a5f;border:none;border-radius:8px;color:#fff;font-weight:bold;cursor:pointer;font-family:Georgia,serif" onclick="doLoss()">Record Loss ⚠️</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div id="toast" class="toast hidden"></div>
+
+<script>
+// ═══════════════════════════════════════════════════
+// DEFAULTS
+// ═══════════════════════════════════════════════════
+const DS=[
+  {id:1,name:"Rwenzori Water",totalItems:12,costPerItem:833,sellingPrice:1000,sold:0},
+  {id:2,name:"Milk Biscuit",totalItems:10,costPerItem:400,sellingPrice:500,sold:0},
+  {id:3,name:"Fanta",totalItems:12,costPerItem:833,sellingPrice:1000,sold:0},
+  {id:4,name:"Embogo",totalItems:12,costPerItem:833,sellingPrice:1000,sold:0},
+  {id:5,name:"Sweet Kati",totalItems:50,costPerItem:70,sellingPrice:100,sold:0},
+  {id:6,name:"Sugar (3kg)",totalItems:3,costPerItem:4000,sellingPrice:4500,sold:0},
+  {id:7,name:"Ivory Sweets",totalItems:50,costPerItem:80,sellingPrice:100,sold:0},
+  {id:8,name:"Cards",totalItems:12,costPerItem:542,sellingPrice:1000,sold:0},
+  {id:9,name:"Sweet Pepsi",totalItems:60,costPerItem:65,sellingPrice:100,sold:0},
+  {id:10,name:"Foot Balls",totalItems:100,costPerItem:35,sellingPrice:50,sold:0},
+  {id:11,name:"Butto 20mls",totalItems:12,costPerItem:333,sellingPrice:500,sold:0},
+  {id:12,name:"Amajani 1kg",totalItems:8,costPerItem:875,sellingPrice:1000,sold:0},
+  {id:13,name:"Salt",totalItems:20,costPerItem:800,sellingPrice:1000,sold:0},
+  {id:14,name:"Lucky",totalItems:12,costPerItem:833,sellingPrice:1000,sold:0},
+  {id:15,name:"Soda",totalItems:12,costPerItem:833,sellingPrice:1000,sold:0},
+];
+const DE=[
+  {id:1,name:"🏠 Shop Rent",amount:60000},
+  {id:2,name:"💡 Electricity",amount:5000},
+  {id:3,name:"🚗 Transport",amount:20000},
+];
+
+// ═══════════════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════════════
+let stock=[], expenses=[], salesLog=[], purchases=[], losses=[];
+let pendingDelId=null, addOpen=false, newSrc=null, rstSrc=null;
+let currentPeriod='today', logFilter='today', toastTmr=null;
+
+// ═══════════════════════════════════════════════════
+// PERSIST
+// ═══════════════════════════════════════════════════
+function save(){
+  try{
+    localStorage.setItem('prs-stock',JSON.stringify(stock));
+    localStorage.setItem('prs-exp',JSON.stringify(expenses));
+    localStorage.setItem('prs-log',JSON.stringify(salesLog.slice(0,600)));
+    localStorage.setItem('prs-pur',JSON.stringify(purchases.slice(0,300)));
+    localStorage.setItem('prs-losses',JSON.stringify(losses.slice(0,300)));
+  }catch(e){}
+}
+function load(){
+  try{
+    const s=localStorage.getItem('prs-stock');
+    stock=s?JSON.parse(s):DS.map(x=>({...x}));
+    stock=stock.map(s=>{
+      if(!s.costPerItem&&s.buyingPrice&&s.totalItems)s.costPerItem=Math.round(s.buyingPrice/s.totalItems);
+      if(!s.costPerItem)s.costPerItem=0;
+      return s;
+    });
+    const e=localStorage.getItem('prs-exp');expenses=e?JSON.parse(e):DE.map(x=>({...x}));
+    const l=localStorage.getItem('prs-log');
+    if(l){salesLog=JSON.parse(l);salesLog=salesLog.map(e=>({...e,ts:e.ts||new Date().toISOString()}));}
+    const p=localStorage.getItem('prs-pur');
+    if(p){purchases=JSON.parse(p);}
+    else{
+      const initCost=stock.reduce((a,s)=>a+s.totalItems*s.costPerItem,0);
+      if(initCost>0){purchases=[{id:Date.now(),itemName:'Initial Stock (all items)',qty:stock.reduce((a,s)=>a+s.totalItems,0),costPerItem:0,totalCost:initCost,source:'external',ts:new Date().toISOString(),note:'Initial inventory'}];}
+    }
+    const ls=localStorage.getItem('prs-losses');if(ls)losses=JSON.parse(ls);
+    // migrate: add expiryDate field if missing
+    stock=stock.map(s=>({expiryDate:null,...s}));
+  }catch(err){stock=DS.map(x=>({...x}));expenses=DE.map(x=>({...x}));}
+}
+
+// ═══════════════════════════════════════════════════
+// UTILS
+// ═══════════════════════════════════════════════════
+const fmt=n=>Math.round(n).toLocaleString();
+const fmtK=n=>{n=Math.round(n);return n>=1000000?(n/1000000).toFixed(1)+'M':n>=1000?(n/1000).toFixed(1)+'k':''+n;};
+function startOf(p){const d=new Date();d.setHours(0,0,0,0);if(p==='today')return d;if(p==='week'){const w=d.getDay()||7;d.setDate(d.getDate()-w+1);return d;}if(p==='month'){d.setDate(1);return d;}if(p==='year'){d.setMonth(0,1);return d;}return new Date(0);}
+function periodLabel(p){const n=new Date();if(p==='today')return 'Today — '+n.toDateString();if(p==='week')return 'Week of '+startOf('week').toDateString();if(p==='month')return n.toLocaleString('default',{month:'long',year:'numeric'});if(p==='year')return 'Year '+n.getFullYear();return 'All Time';}
+function filterLog(p){if(p==='all')return salesLog;const st=startOf(p).getTime();return salesLog.filter(e=>new Date(e.ts).getTime()>=st);}
+function totalOverhead(){return expenses.reduce((a,e)=>a+e.amount,0);}
+function expiryInfo(s){
+  if(!s.expiryDate)return '';
+  const now=new Date();now.setHours(0,0,0,0);
+  const exp=new Date(s.expiryDate);
+  const days=Math.ceil((exp-now)/(1000*60*60*24));
+  if(days<0)return `<div style="background:#2f1a1a;border:1px solid #6a2d2d;border-radius:6px;padding:5px 10px;margin-top:6px;font-size:11px;color:#e07a5f">⛔ EXPIRED ${Math.abs(days)} day(s) ago — Remove from sale immediately!</div>`;
+  if(days===0)return `<div style="background:#2f1a1a;border:1px solid #e07a5f;border-radius:6px;padding:5px 10px;margin-top:6px;font-size:11px;color:#e07a5f">⚠️ EXPIRES TODAY — Sell urgently!</div>`;
+  if(days<=3)return `<div style="background:#2f1e0a;border:1px solid #8a6a1a;border-radius:6px;padding:5px 10px;margin-top:6px;font-size:11px;color:#f2cc8f">⚠️ Expires in ${days} day(s) — Sell quickly!</div>`;
+  if(days<=7)return `<div style="background:#1a2a1a;border:1px solid #4a7a4a;border-radius:6px;padding:5px 10px;margin-top:6px;font-size:11px;color:#74c69d">📅 Expires in ${days} days (${exp.toLocaleDateString()})</div>`;
+  return `<div style="font-size:11px;color:#5a7a6a;margin-top:5px">📅 Expires: ${exp.toLocaleDateString()}</div>`;
+}
+
+// ─── CAPITAL CALCULATIONS ───────────────────────────
+function capitalStats(){
+  const totalExternal=purchases.filter(p=>p.source==='external').reduce((a,p)=>a+p.totalCost,0);
+  const totalInternalSpent=purchases.filter(p=>p.source==='internal').reduce((a,p)=>a+p.totalCost,0);
+  const totalRevenue=salesLog.reduce((a,e)=>a+e.total,0);
+  const cashInHand=Math.max(0,totalRevenue-totalInternalSpent);
+  const stockValue=stock.reduce((a,s)=>a+(s.totalItems-s.sold)*s.costPerItem,0);
+  const totalLosses=losses.reduce((a,l)=>a+l.totalLoss,0);
+  const totalWorth=cashInHand+stockValue;
+  const netProfit=totalWorth-totalExternal;
+  const totalSalesProfit=salesLog.reduce((a,e)=>a+(e.profitAmt||0),0);
+  return{totalExternal,totalInternalSpent,totalRevenue,cashInHand,stockValue,totalLosses,totalWorth,netProfit,totalSalesProfit};
+}
+
+// ═══════════════════════════════════════════════════
+// TOAST
+// ═══════════════════════════════════════════════════
+function toast(msg,t='s'){
+  const el=document.getElementById('toast');
+  el.textContent=(t==='e'?'⚠️ ':'✓ ')+msg;
+  el.className='toast toast-'+t;
+  clearTimeout(toastTmr);
+  toastTmr=setTimeout(()=>el.className='toast hidden',2500);
+}
+
+// ═══════════════════════════════════════════════════
+// TABS
+// ═══════════════════════════════════════════════════
+function switchTab(name,btn){
+  ['stock','capital','reports','profit','expenses'].forEach(t=>document.getElementById('tab-'+t).classList.add('hidden'));
+  document.getElementById('tab-'+name).classList.remove('hidden');
+  document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  if(name==='capital')renderCapital();
+  if(name==='reports')renderReports();
+  if(name==='profit')renderProfit();
+  if(name==='expenses')renderExpenses();
+}
+
+// ═══════════════════════════════════════════════════
+// HEADER
+// ═══════════════════════════════════════════════════
+function renderHeader(){
+  const c=capitalStats();
+  document.getElementById('hd-cash').textContent=fmtK(c.cashInHand);
+  document.getElementById('hd-stock').textContent=fmtK(c.stockValue);
+  document.getElementById('hd-worth').textContent=fmtK(c.totalWorth);
+  document.getElementById('hd-profit').textContent=(c.netProfit>=0?'+':'')+fmtK(c.netProfit);
+  document.getElementById('hd-profit').style.color=c.netProfit>=0?'#52b788':'#e07a5f';
+}
+
+// ═══════════════════════════════════════════════════
+// STOCK
+// ═══════════════════════════════════════════════════
+function renderStock(){
+  const el=document.getElementById('stock-list');
+  if(!stock.length){el.innerHTML='<div class="empty-state">No items yet.<br/>Tap "+ Add New Item" to begin.</div>';return;}
+  el.innerHTML=stock.map(s=>{
+    const rem=s.totalItems-s.sold;
+    const pct=Math.min(Math.round((s.sold/s.totalItems)*100),100);
+    const isLow=rem>0&&rem<=Math.ceil(s.totalItems*0.2);
+    const isOut=rem===0;
+    const barC=isOut?'#6a2d2d':pct>80?'#e07a5f':'#52b788';
+    const statusSpan=isOut?'<span style="color:#e07a5f">SOLD OUT</span>':isLow?`<span style="color:#f2cc8f">⚠️ ${rem} left</span>`:`<span style="color:#74c69d">${rem} remaining</span>`;
+    const profitPer=s.sellingPrice-s.costPerItem;
+    const sellBlock=!isOut?`<div class="sell-row">
+      <input class="sell-inp" type="number" min="1" max="${rem}" placeholder="How many sold now?" id="si-${s.id}"/>
+      <button class="btn-sell" onclick="sellItem(${s.id})">Sell ✓</button>
+    </div>`:`<div class="out-badge">📭 Sold Out — tap 🔄 to restock</div>`;
+    return`<div class="item-card${isOut?' out':isLow?' low':''}">
+      <div class="item-inner">
+        <div class="item-top">
+          <div style="flex:1">
+            <div class="item-name">${s.name}${isOut?'<span class="cycle-badge">new cycle</span>':''}</div>
+            <div class="item-meta">
+              Cost/item: <span style="color:#e07a5f">${fmt(s.costPerItem)}</span> ·
+              Sell: <span style="color:#74c69d;text-decoration:underline dotted;cursor:pointer" onclick="openPriceEdit(${s.id})">${fmt(s.sellingPrice)} ✏️</span> ·
+              Profit: <span style="color:${profitPer>=0?'#52b788':'#e07a5f'}">+${fmt(profitPer)}</span>
+            </div>
+          </div>
+          <div class="item-btns">
+            <button class="btn-sm-rst" onclick="openRst(${s.id})">🔄</button>
+            <button class="btn-sm-edit" onclick="openEdit(${s.id})">✏️</button>
+            <button class="btn-sm-del" onclick="openDel(${s.id})">🗑️</button>
+          </div>
+        </div>
+        ${expiryInfo(s)}
+        <div class="prog-info"><span>Sold: ${s.sold} / ${s.totalItems}</span>${statusSpan}</div>
+        <div class="prog-bar"><div class="prog-fill" style="width:${pct}%;background:${barC}"></div></div>
+        ${sellBlock}
+        ${rem>0?`<button onclick="openLoss(${s.id})" style="width:100%;margin-top:7px;padding:7px;background:#2f1a1a;border:1px solid #6a2d2d;border-radius:8px;color:#e07a5f;font-size:12px;cursor:pointer;font-family:Georgia,serif">⚠️ Report Expired / Spoiled / Damaged</button>`:''}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ═══════════════════════════════════════════════════
+// ADD ITEM
+// ═══════════════════════════════════════════════════
+function toggleAddForm(){
+  addOpen=!addOpen;newSrc=null;
+  document.getElementById('add-form').classList.toggle('hidden',!addOpen);
+  document.getElementById('add-btn').textContent=addOpen?'✕ Cancel':'+ Add New Item';
+  document.getElementById('new-src-int').className='src-btn';
+  document.getElementById('new-src-ext').className='src-btn';
+}
+function setNewSrc(src){
+  newSrc=src;
+  document.getElementById('new-src-int').className='src-btn'+(src==='internal'?' selected-int':'');
+  document.getElementById('new-src-ext').className='src-btn'+(src==='external'?' selected-ext':'');
+  updateNewPreview();
+}
+function updateNewPreview(){
+  const qty=parseInt(document.getElementById('new-qty').value)||0;
+  const buy=parseInt(document.getElementById('new-buy').value)||0;
+  const sell=parseInt(document.getElementById('new-sell').value)||0;
+  const el=document.getElementById('new-preview');
+  if(qty&&buy&&sell){
+    const cpi=Math.round(buy/qty);
+    const prof=sell-cpi;
+    const srcNote=newSrc==='internal'?'<span style="color:#52b788">💵 Paid from business revenue</span>':newSrc==='external'?'<span style="color:#f2cc8f">💰 New capital added to business</span>':'<span style="color:#e07a5f">⚠️ Please select where money came from</span>';
+    el.style.display='block';
+    el.innerHTML=`Cost/item: <strong style="color:#e07a5f">${fmt(cpi)} UGX</strong> · Profit/item: <strong style="color:#52b788">+${fmt(prof)} UGX</strong><br/>Total potential profit: <strong style="color:#74c69d">${fmt(prof*qty)} UGX</strong><br/>${srcNote}`;
+  }else{el.style.display='none';}
+}
+function addItem(){
+  const name=document.getElementById('new-name').value.trim();
+  const qty=parseInt(document.getElementById('new-qty').value);
+  const buy=parseInt(document.getElementById('new-buy').value);
+  const sell=parseInt(document.getElementById('new-sell').value);
+  if(!name)return toast('Please enter the item name','e');
+  if(!qty||qty<1)return toast('Please enter how many items you bought','e');
+  if(!buy||buy<0)return toast('Please enter the total buying price','e');
+  if(!sell||sell<0)return toast('Please enter the selling price per item','e');
+  if(!newSrc)return toast('Please select where the money came from','e');
+  const cpi=Math.round(buy/qty);
+  const id=Date.now();
+  const expiry=document.getElementById('new-expiry').value||null;
+  stock.push({id,name,totalItems:qty,costPerItem:cpi,sellingPrice:sell,sold:0,expiryDate:expiry});
+  purchases.unshift({id:Date.now()+1,itemName:name,qty,costPerItem:cpi,totalCost:buy,source:newSrc,ts:new Date().toISOString()});
+  ['new-name','new-qty','new-buy','new-sell','new-expiry'].forEach(i=>document.getElementById(i).value='');
+  document.getElementById('new-preview').style.display='none';
+  newSrc=null;toggleAddForm();save();renderHeader();renderStock();
+  toast(name+' added! ('+(newSrc==='internal'?'from revenue':'new capital')+')');
+}
+
+// ═══════════════════════════════════════════════════
+// SELL
+// ═══════════════════════════════════════════════════
+function sellItem(id){
+  const s=stock.find(x=>x.id===id);if(!s)return;
+  const qty=parseInt(document.getElementById('si-'+id).value||0);
+  if(!qty||qty<1)return toast('Enter how many you sold','e');
+  const rem=s.totalItems-s.sold;
+  if(qty>rem)return toast('Only '+rem+' left in stock!','e');
+  const pa=qty*(s.sellingPrice-s.costPerItem);
+  s.sold+=qty;
+  salesLog.unshift({id:Date.now(),item:s.name,qty,price:s.sellingPrice,total:qty*s.sellingPrice,profitAmt:Math.round(pa),ts:new Date().toISOString(),time:new Date().toLocaleString()});
+  save();renderHeader();renderStock();toast('Sold '+qty+' × '+s.name);
+}
+
+// ═══════════════════════════════════════════════════
+// RESTOCK
+// ═══════════════════════════════════════════════════
+function openRst(id){
+  const s=stock.find(x=>x.id===id);if(!s)return;
+  const isSoldOut=s.sold>=s.totalItems;
+  document.getElementById('rst-id').value=id;
+  document.getElementById('rst-title').textContent='🔄 Restock — '+s.name;
+  document.getElementById('rst-qty').value='';
+  document.getElementById('rst-price').value='';
+  document.getElementById('rst-expiry').value=s.expiryDate||'';
+  document.getElementById('rst-cpi-display').style.display='none';
+  document.getElementById('rst-preview').style.display='none';
+  rstSrc=null;
+  document.getElementById('rst-src-int').className='src-btn';
+  document.getElementById('rst-src-ext').className='src-btn';
+  if(isSoldOut){
+    document.getElementById('rst-note').innerHTML=`<div class="new-cycle-note">✅ Item is sold out. This starts a <strong>fresh new cycle</strong> — count resets to new quantity only.</div>`;
+    document.getElementById('rst-save-btn').textContent='Start New Cycle ✓';
+  }else{
+    const rem=s.totalItems-s.sold;
+    document.getElementById('rst-note').innerHTML=`<div class="warn-note">📦 ${rem} items still remaining. This adds to current stock.</div>`;
+    document.getElementById('rst-save-btn').textContent='Add to Stock ✓';
+  }
+  document.getElementById('rst-modal').classList.remove('hidden');
+}
+function setRstSrc(src){
+  rstSrc=src;
+  document.getElementById('rst-src-int').className='src-btn'+(src==='internal'?' selected-int':'');
+  document.getElementById('rst-src-ext').className='src-btn'+(src==='external'?' selected-ext':'');
+  updateRstPreview();
+}
+function updateRstPreview(){
+  const id=parseInt(document.getElementById('rst-id').value);
+  const s=stock.find(x=>x.id===id);if(!s)return;
+  const qty=parseInt(document.getElementById('rst-qty').value)||0;
+  const totalCost=parseInt(document.getElementById('rst-price').value)||0;
+  const cpiDisplay=document.getElementById('rst-cpi-display');
+  const el=document.getElementById('rst-preview');
+  if(qty&&totalCost){
+    const cpi=Math.round(totalCost/qty);
+    const prof=s.sellingPrice-cpi;
+    cpiDisplay.style.display='block';
+    cpiDisplay.innerHTML=`🔢 Calculated: <strong style="color:#74c69d">${fmt(totalCost)} ÷ ${qty} items = <span style="color:#e07a5f">${fmt(cpi)} UGX per item</span></strong>`;
+    const srcNote=rstSrc==='internal'?'<span style="color:#52b788">💵 Paid from business revenue</span>':rstSrc==='external'?'<span style="color:#f2cc8f">💰 New capital added</span>':'<span style="color:#8a9ba8">Select money source above</span>';
+    el.style.display='block';
+    el.innerHTML=`Cost/item: <strong style="color:#e07a5f">${fmt(cpi)} UGX</strong> · Profit/item: <strong style="color:${prof>=0?'#52b788':'#e07a5f'}">${prof>=0?'+':''}${fmt(prof)} UGX</strong><br/>Total restock cost: <strong style="color:#f2cc8f">${fmt(totalCost)} UGX</strong><br/>${srcNote}`;
+  }else{cpiDisplay.style.display='none';el.style.display='none';}
+}
+function closeRst(){document.getElementById('rst-modal').classList.add('hidden');document.getElementById('rst-cpi-display').style.display='none';}
+function doRestock(){
+  const id=parseInt(document.getElementById('rst-id').value);
+  const s=stock.find(x=>x.id===id);if(!s)return;
+  const qty=parseInt(document.getElementById('rst-qty').value)||0;
+  const totalCost=parseInt(document.getElementById('rst-price').value)||0;
+  if(!qty||qty<1)return toast('Enter how many items you are adding','e');
+  if(!totalCost||totalCost<1)return toast('Enter the total buying price','e');
+  if(!rstSrc)return toast('Please select where the money came from','e');
+  const cpi=Math.round(totalCost/qty);
+  const isSoldOut=s.sold>=s.totalItems;
+  const expiry=document.getElementById('rst-expiry').value||s.expiryDate||null;
+  if(isSoldOut){
+    s.totalItems=qty;s.sold=0;s.costPerItem=cpi;s.expiryDate=expiry;
+    toast('New cycle: '+qty+' × '+s.name+' @ '+fmt(cpi)+'/item');
+  }else{
+    s.totalItems+=qty;s.costPerItem=cpi;if(expiry)s.expiryDate=expiry;
+    toast('Restocked '+qty+' × '+s.name+' @ '+fmt(cpi)+'/item');
+  }
+  purchases.unshift({id:Date.now(),itemName:s.name,qty,costPerItem:cpi,totalCost,source:rstSrc,ts:new Date().toISOString(),note:isSoldOut?'New cycle':'Added to stock'});
+  closeRst();save();renderHeader();renderStock();
+}
+function askNewCycle(){
+  if(confirm('Start a new selling cycle for ALL items?\n\nSold counts reset to zero.\nStock quantities and full history are kept.')){
+    stock.forEach(s=>s.sold=0);save();renderHeader();renderStock();toast('New cycle started!');
+  }
+}
+
+// ═══════════════════════════════════════════════════
+// CAPITAL TAB
+// ═══════════════════════════════════════════════════
+function renderCapital(){
+  const c=capitalStats();
+  const cards=[
+    {label:'💰 External Capital Put In',val:c.totalExternal,color:'#f2cc8f',sub:'Money from outside the business'},
+    {label:'📈 Total Sales Revenue',val:c.totalRevenue,color:'#74c69d',sub:'Money earned from all sales'},
+    {label:'💵 Revenue Reinvested',val:c.totalInternalSpent,color:'#81b29a',sub:'Revenue used to buy more stock'},
+    {label:'💵 Cash in Hand',val:c.cashInHand,color:'#52b788',sub:'Revenue minus reinvested amount'},
+    {label:'📦 Stock Value',val:c.stockValue,color:'#74c69d',sub:'Current stock at buying cost'},
+    {label:'🏪 Total Business Worth',val:c.totalWorth,color:'#f2cc8f',sub:'Cash + Stock Value',big:true},
+  ];
+  document.getElementById('cap-cards').innerHTML=cards.map(c=>`
+    <div class="cap-card${c.big?' highlight':''}">
+      <div class="cap-val" style="color:${c.color}">${fmtK(c.val)}</div>
+      <div class="cap-lbl">${c.label}<br/><span style="font-size:9px;opacity:.7">${c.sub}</span></div>
+    </div>`).join('');
+  const profColor=c.netProfit>=0?'#52b788':'#e07a5f';
+  document.getElementById('cap-breakdown').innerHTML=`
+    <div class="sum-row"><span class="sum-lbl">External Capital Invested</span><span class="sum-val" style="color:#f2cc8f">${fmt(c.totalExternal)} UGX</span></div>
+    <div class="sum-row"><span class="sum-lbl">Cash in Hand (Revenue − Reinvested)</span><span class="sum-val" style="color:#52b788">${fmt(c.cashInHand)} UGX</span></div>
+    <div class="sum-row"><span class="sum-lbl">Current Stock Value (at cost)</span><span class="sum-val" style="color:#74c69d">${fmt(c.stockValue)} UGX</span></div>
+    ${c.totalLosses>0?`<div class="sum-row"><span class="sum-lbl">⚠️ Total Losses (expired/spoiled/damaged)</span><span class="sum-val" style="color:#e07a5f">−${fmt(c.totalLosses)} UGX</span></div>`:''}
+    <div class="sum-row"><span class="sum-lbl">Total Business Worth</span><span class="sum-val" style="color:#f2cc8f">${fmt(c.totalWorth)} UGX</span></div>
+    <div class="sum-row" style="padding-top:12px;margin-top:4px;border-top:2px solid #2d6a4f">
+      <span style="font-size:14px;font-weight:bold;color:#e8dcc8">NET PROFIT</span>
+      <span style="font-size:15px;font-weight:bold;color:${profColor}">${c.netProfit>=0?'+':''}${fmt(c.netProfit)} UGX</span>
+    </div>
+    <div style="font-size:11px;color:#8a9ba8;padding-top:6px;line-height:1.6">Net Profit = Total Worth (${fmt(c.totalWorth)}) − External Capital (${fmt(c.totalExternal)})</div>`;
+
+  const el=document.getElementById('purchase-log');
+  const lossHtml=losses.length?`<div class="sec-title" style="margin-top:4px;color:#e07a5f">⚠️ Loss Records</div>`+
+    losses.map(l=>{
+      const icons={expired:'📅',spoiled:'🤢',damaged:'💥',stolen:'🚨',other:'❓'};
+      return`<div style="background:#2f1a1a;border-radius:8px;padding:10px 12px;margin-bottom:7px;border-left:3px solid #e07a5f">
+        <div style="display:flex;justify-content:space-between">
+          <span style="font-size:13px;color:#e8dcc8;font-weight:bold">${icons[l.reason]||'❓'} ${l.itemName}</span>
+          <span style="font-size:13px;color:#e07a5f;font-weight:bold">−${fmt(l.totalLoss)} UGX</span>
+        </div>
+        <div style="font-size:11px;color:#8a9ba8;margin-top:3px">${l.qty} items · ${l.reason} · ${new Date(l.ts).toLocaleDateString()}</div>
+      </div>`;
+    }).join(''):'';
+  const purHtml=!purchases.length?'<div class="empty-state">No purchases yet</div>':
+    `<div class="sec-title" style="margin-top:${losses.length?'10px':'0'}">📋 Purchase History</div>`+
+    purchases.map(p=>`
+      <div class="pur-entry ${p.source}">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start">
+          <div>
+            <div style="font-size:13px;font-weight:bold;color:#e8dcc8">${p.itemName}</div>
+            <div style="font-size:11px;color:#8a9ba8;margin-top:3px">${p.qty>0?p.qty+' items · ':''}<span style="color:#e07a5f">${fmt(p.totalCost)} UGX</span>${p.note?` · <em>${p.note}</em>`:''}</div>
+            <div style="font-size:10px;color:#5a7a6a;margin-top:2px">${new Date(p.ts).toLocaleString()}</div>
+          </div>
+          <span class="src-badge ${p.source}">${p.source==='external'?'💰 New Money':'💵 Revenue'}</span>
+        </div>
+      </div>`).join('');
+  el.innerHTML=lossHtml+purHtml;
+}
+
+// ═══════════════════════════════════════════════════
+// PRICE EDIT
+// ═══════════════════════════════════════════════════
+function openPriceEdit(id){
+  const s=stock.find(x=>x.id===id);if(!s)return;
+  document.getElementById('price-id').value=id;
+  document.getElementById('price-new').value=s.sellingPrice;
+  document.getElementById('price-info').innerHTML=`<strong style="color:#e8dcc8">${s.name}</strong><br/>Current price: <strong style="color:#74c69d">${fmt(s.sellingPrice)} UGX</strong> · Cost/item: <strong style="color:#e07a5f">${fmt(s.costPerItem)} UGX</strong><br/>Items remaining: <strong style="color:#f2cc8f">${s.totalItems-s.sold}</strong>`;
+  updatePricePreview();
+  document.getElementById('price-modal').classList.remove('hidden');
+}
+function updatePricePreview(){
+  const id=parseInt(document.getElementById('price-id').value);
+  const s=stock.find(x=>x.id===id);if(!s)return;
+  const newP=parseInt(document.getElementById('price-new').value)||0;
+  const el=document.getElementById('price-preview');
+  if(newP>0){
+    const newProfit=newP-s.costPerItem;
+    const diff=newP-s.sellingPrice;
+    el.style.display='block';
+    el.innerHTML=`New profit/item: <strong style="color:${newProfit>=0?'#52b788':'#e07a5f'}">${newProfit>=0?'+':''}${fmt(newProfit)} UGX</strong>${diff!==0?`<br/>Change: <strong style="color:${diff>0?'#74c69d':'#e07a5f'}">${diff>0?'▲ UP':'▼ DOWN'} ${fmt(Math.abs(diff))} UGX</strong>`:''}`;
+  }else{el.style.display='none';}
+}
+function closePriceEdit(){document.getElementById('price-modal').classList.add('hidden');}
+function savePriceEdit(){
+  const id=parseInt(document.getElementById('price-id').value);
+  const s=stock.find(x=>x.id===id);if(!s)return;
+  const newP=parseInt(document.getElementById('price-new').value)||0;
+  if(!newP||newP<1)return toast('Enter a valid selling price','e');
+  const old=s.sellingPrice;s.sellingPrice=newP;
+  closePriceEdit();save();renderHeader();renderStock();
+  toast(`${s.name}: price ${newP>old?'raised ▲':'lowered ▼'} to ${fmt(newP)} UGX`);
+}
+
+// ═══════════════════════════════════════════════════
+// EDIT / DELETE
+// ═══════════════════════════════════════════════════
+function openEdit(id){
+  const s=stock.find(x=>x.id===id);if(!s)return;
+  document.getElementById('edit-id').value=id;
+  document.getElementById('edit-name').value=s.name;
+  document.getElementById('edit-qty').value=s.totalItems;
+  document.getElementById('edit-cpi').value=s.costPerItem;
+  document.getElementById('edit-sell').value=s.sellingPrice;
+  document.getElementById('edit-modal').classList.remove('hidden');
+}
+function closeEdit(){document.getElementById('edit-modal').classList.add('hidden');}
+function saveEdit(){
+  const id=parseInt(document.getElementById('edit-id').value);
+  const s=stock.find(x=>x.id===id);if(!s)return;
+  s.name=document.getElementById('edit-name').value.trim()||s.name;
+  s.totalItems=parseInt(document.getElementById('edit-qty').value)||s.totalItems;
+  s.costPerItem=parseInt(document.getElementById('edit-cpi').value)||s.costPerItem;
+  s.sellingPrice=parseInt(document.getElementById('edit-sell').value)||s.sellingPrice;
+  closeEdit();save();renderHeader();renderStock();toast('Item updated!');
+}
+function openDel(id){
+  pendingDelId=id;
+  const s=stock.find(x=>x.id===id);
+  document.getElementById('del-title').textContent='Delete '+(s?s.name:'this item')+'?';
+  document.getElementById('del-modal').classList.remove('hidden');
+}
+function closeDel(){document.getElementById('del-modal').classList.add('hidden');}
+function doDelete(){stock=stock.filter(x=>x.id!==pendingDelId);closeDel();save();renderHeader();renderStock();toast('Item deleted');}
+
+// ═══════════════════════════════════════════════════
+// EXPENSES
+// ═══════════════════════════════════════════════════
+function renderExpenses(){
+  const list=document.getElementById('exp-list');
+  list.innerHTML=!expenses.length?'<div class="empty-state" style="padding:16px">No expenses yet. Tap + Add.</div>':
+    expenses.map(e=>`<div class="exp-item">
+      <div><div style="font-size:13px;font-weight:bold;color:#e8dcc8">${e.name}</div>
+        <div style="font-size:11px;color:#8a9ba8;margin-top:2px">Monthly: <span style="color:#e07a5f">${fmt(e.amount)} UGX</span></div>
+      </div>
+      <div style="display:flex;gap:6px">
+        <button class="btn-sm-edit" onclick="openEditExp(${e.id})">✏️</button>
+        <button class="btn-sm-del" onclick="deleteExp(${e.id})">🗑️</button>
+      </div>
+    </div>`).join('');
+  document.getElementById('exp-total').textContent=fmt(totalOverhead())+' UGX';
+  renderBreakeven();
+}
+function openAddExp(){
+  document.getElementById('exp-modal-title').textContent='➕ Add New Expense';
+  document.getElementById('exp-edit-id').value='';
+  document.getElementById('exp-name').value='';
+  document.getElementById('exp-amount').value='';
+  document.getElementById('exp-modal').classList.remove('hidden');
+}
+function openEditExp(id){
+  const e=expenses.find(x=>x.id===id);if(!e)return;
+  document.getElementById('exp-modal-title').textContent='✏️ Edit Expense';
+  document.getElementById('exp-edit-id').value=id;
+  document.getElementById('exp-name').value=e.name;
+  document.getElementById('exp-amount').value=e.amount;
+  document.getElementById('exp-modal').classList.remove('hidden');
+}
+function closeExpModal(){document.getElementById('exp-modal').classList.add('hidden');}
+function saveExpense(){
+  const name=document.getElementById('exp-name').value.trim();
+  const amount=parseInt(document.getElementById('exp-amount').value)||0;
+  if(!name)return toast('Enter expense name','e');
+  if(!amount)return toast('Enter the amount','e');
+  const editId=document.getElementById('exp-edit-id').value;
+  if(editId){const e=expenses.find(x=>x.id===parseInt(editId));if(e){e.name=name;e.amount=amount;}toast('Expense updated!');}
+  else{expenses.push({id:Date.now(),name,amount});toast(name+' added!');}
+  closeExpModal();save();renderExpenses();
+}
+function deleteExp(id){if(confirm('Remove this expense?')){expenses=expenses.filter(x=>x.id!==id);save();renderExpenses();toast('Expense removed');}}
+function renderBreakeven(){
+  const c=capitalStats();
+  const oh=totalOverhead();
+  const grossPotential=stock.reduce((a,s)=>a+(s.totalItems*(s.sellingPrice-s.costPerItem)),0);
+  const restocks=oh>0?Math.ceil(oh/Math.max(grossPotential,1)):0;
+  document.getElementById('breakeven').innerHTML=`
+    <div class="sum-row"><span class="sum-lbl">Max profit per restock cycle</span><span class="sum-val" style="color:#52b788">${fmt(grossPotential)} UGX</span></div>
+    <div class="sum-row"><span class="sum-lbl">Total monthly expenses</span><span class="sum-val" style="color:#e07a5f">${fmt(oh)} UGX</span></div>
+    <div class="sum-row"><span class="sum-lbl">Net after expenses (per cycle)</span><span class="sum-val" style="color:${grossPotential>=oh?'#74c69d':'#e07a5f'}">${fmt(grossPotential-oh)} UGX</span></div>
+    <div class="sum-row"><span class="sum-lbl">Min restocks/month needed</span><span class="sum-val" style="color:#f2cc8f">${restocks}× minimum</span></div>`;
+  const ep=c.totalSalesProfit;
+  const good=ep>=oh;
+  document.getElementById('status-box').innerHTML=`
+    <div class="status-box ${good?'st-good':'st-bad'}">
+      <div style="font-size:14px;font-weight:bold;color:${good?'#74c69d':'#e07a5f'};margin-bottom:8px">${good?'✅ Expenses Covered!':'⏳ Expenses Not Yet Covered'}</div>
+      <div style="font-size:12px;color:#8a9ba8;line-height:1.9">
+        Profit earned so far: <strong style="color:#f2cc8f">${fmt(ep)} UGX</strong><br/>
+        Monthly expenses: <strong style="color:#e07a5f">${fmt(oh)} UGX</strong><br/>
+        Balance: <strong style="color:${good?'#74c69d':'#e07a5f'}">${fmt(ep-oh)} UGX</strong>
+      </div>
+    </div>`;
+  const mE=filterLog('month');
+  const mRev=mE.reduce((a,e)=>a+e.total,0);
+  const mProfit=mE.reduce((a,e)=>a+(e.profitAmt||0),0);
+  const dom=new Date().getDate();
+  const pace=dom>0?mRev/dom:0;
+  const dInM=new Date(new Date().getFullYear(),new Date().getMonth()+1,0).getDate();
+  const proj=pace*dInM;const projP=dom>0?(mProfit/dom)*dInM:0;
+  document.getElementById('forecast').innerHTML=`
+    <div class="sum-row"><span class="sum-lbl">Revenue so far this month</span><span class="sum-val" style="color:#f2cc8f">${fmt(mRev)} UGX</span></div>
+    <div class="sum-row"><span class="sum-lbl">Profit so far this month</span><span class="sum-val" style="color:#52b788">${fmt(mProfit)} UGX</span></div>
+    <div class="sum-row"><span class="sum-lbl">Daily average</span><span class="sum-val" style="color:#74c69d">${fmt(pace)} UGX/day</span></div>
+    <div class="sum-row"><span class="sum-lbl">Projected end-of-month revenue</span><span class="sum-val" style="color:#74c69d">${fmt(proj)} UGX</span></div>
+    <div class="sum-row"><span class="sum-lbl">Projected end-of-month profit</span><span class="sum-val" style="color:#52b788">${fmt(projP)} UGX</span></div>
+    <div class="sum-row"><span class="sum-lbl">Projected net (after expenses)</span><span class="sum-val" style="color:${projP-oh>=0?'#52b788':'#e07a5f'}">${fmt(projP-oh)} UGX</span></div>`;
+}
+
+// ═══════════════════════════════════════════════════
+// REPORTS
+// ═══════════════════════════════════════════════════
+function setPeriod(p,btn){
+  currentPeriod=p;
+  document.querySelectorAll('#tab-reports .ptab').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');renderReports();
+}
+function renderReports(){
+  const entries=filterLog(currentPeriod);
+  document.getElementById('r-period-lbl').textContent=periodLabel(currentPeriod);
+  let rev=0,profit=0,units=0;const byItem={},byDay={};
+  entries.forEach(e=>{
+    rev+=e.total;units+=e.qty;profit+=(e.profitAmt||0);
+    if(!byItem[e.item])byItem[e.item]={rev:0,qty:0,profit:0};
+    byItem[e.item].rev+=e.total;byItem[e.item].qty+=e.qty;byItem[e.item].profit+=(e.profitAmt||0);
+    const day=new Date(e.ts).toLocaleDateString('en-GB',{day:'2-digit',month:'short'});
+    if(!byDay[day])byDay[day]={rev:0,qty:0};byDay[day].rev+=e.total;byDay[day].qty+=e.qty;
+  });
+  document.getElementById('r-rev').textContent=fmtK(rev);
+  document.getElementById('r-profit').textContent=fmtK(profit);
+  document.getElementById('r-tx').textContent=entries.length;
+  document.getElementById('r-units').textContent=units;
+  const sorted=Object.entries(byItem).sort((a,b)=>b[1].rev-a[1].rev).slice(0,8);
+  const maxR=sorted.length?sorted[0][1].rev:1;
+  document.getElementById('r-chart').innerHTML=!sorted.length?'<div class="empty-state" style="padding:16px">No sales in this period</div>':
+    sorted.map(([n,d])=>`<div class="chart-item">
+      <div class="chart-top"><span style="color:#e8dcc8;font-weight:bold">${n}</span><span style="color:#74c69d">${fmt(d.rev)} UGX (${d.qty})</span></div>
+      <div class="chart-bg"><div class="chart-fill" style="width:${Math.round(d.rev/maxR*100)}%"></div></div>
+    </div>`).join('');
+  document.getElementById('r-breakdown').innerHTML=!sorted.length?'<div class="empty-state" style="padding:12px">No data yet</div>':
+    `<div class="sum-row" style="padding:5px 0"><span style="font-size:11px;font-weight:bold;color:#e8dcc8">Item</span><span style="font-size:11px;color:#8a9ba8">Qty · Revenue · Profit</span></div>`+
+    sorted.map(([n,d])=>`<div class="sum-row"><span class="sum-lbl">${n}</span><span style="font-size:12px;color:#74c69d">${d.qty} · ${fmt(d.rev)} · <span style="color:#52b788">+${fmt(d.profit)}</span></span></div>`).join('');
+  const last14=[];for(let i=13;i>=0;i--){const d=new Date();d.setDate(d.getDate()-i);last14.push(d.toLocaleDateString('en-GB',{day:'2-digit',month:'short'}));}
+  const maxD=Math.max(1,...last14.map(d=>byDay[d]?byDay[d].rev:0));
+  const dItems=last14.reverse().filter(d=>byDay[d]);
+  document.getElementById('r-daily').innerHTML=!dItems.length?'<div class="empty-state" style="padding:12px">No daily data yet</div>':
+    dItems.map(d=>`<div class="chart-item">
+      <div class="chart-top"><span style="color:#e8dcc8;font-weight:bold">${d}</span><span style="color:#81b29a">${fmt(byDay[d].rev)} UGX</span></div>
+      <div class="chart-bg"><div class="chart-fill" style="width:${Math.round(byDay[d].rev/maxD*100)}%;background:linear-gradient(90deg,#1e3a8a,#60a5fa)"></div></div>
+    </div>`).join('');
+}
+
+// ═══════════════════════════════════════════════════
+// PROFIT
+// ═══════════════════════════════════════════════════
+function renderProfit(){
+  const c=capitalStats();
+  const grossPotential=stock.reduce((a,s)=>a+(s.totalItems*(s.sellingPrice-s.costPerItem)),0);
+  document.getElementById('profit-summary').innerHTML=[
+    {l:'Total Stock Value (at buying cost)',v:c.stockValue,c:'#e07a5f'},
+    {l:'Revenue if ALL current stock sold',v:stock.reduce((a,s)=>a+s.totalItems*s.sellingPrice,0),c:'#74c69d'},
+    {l:'Max Gross Profit (current stock)',v:grossPotential,c:'#52b788'},
+    {l:'Total Sales Revenue (all time)',v:c.totalRevenue,c:'#f2cc8f'},
+    {l:'Total Sales Profit (all time)',v:c.totalSalesProfit,c:'#81b29a'},
+    {l:'Net Profit (Worth − Capital)',v:c.netProfit,c:c.netProfit>=0?'#74c69d':'#e07a5f'},
+  ].map(r=>`<div class="sum-row"><span class="sum-lbl">${r.l}</span><span class="sum-val" style="color:${r.c}">${fmt(r.v)} UGX</span></div>`).join('');
+  document.getElementById('profit-list').innerHTML=[...stock].sort((a,b)=>{
+    return((b.sellingPrice-b.costPerItem)/b.sellingPrice)-((a.sellingPrice-a.costPerItem)/a.sellingPrice);
+  }).map(s=>{
+    const pip=s.sellingPrice-s.costPerItem;
+    const mg=Math.round((pip/Math.max(s.sellingPrice,1))*100);
+    const earned=Math.round(s.sold*pip);
+    return`<div class="profit-item">
+      <div><div style="font-size:13px;font-weight:bold;color:#e8dcc8">${s.name}</div>
+        <div style="font-size:11px;color:#8a9ba8;margin-top:2px">Margin: <span style="color:${mg>30?'#52b788':'#f2cc8f'}">${mg}%</span> · Sold: ${s.sold}</div>
+      </div>
+      <div style="text-align:right">
+        <div style="font-size:13px;color:#74c69d;font-weight:bold">+${fmt(pip)}/item</div>
+        <div style="font-size:11px;color:${earned>0?'#52b788':'#8a9ba8'}">Earned: ${fmt(earned)}</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ═══════════════════════════════════════════════════
+// SALES LOG
+// ═══════════════════════════════════════════════════
+function setLogFilter(f,btn){
+  logFilter=f;
+  document.querySelectorAll('#log-overlay .ptab').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');renderLog();
+}
+function openLog(){document.getElementById('log-overlay').classList.remove('hidden');renderLog();}
+function closeLog(){document.getElementById('log-overlay').classList.add('hidden');}
+function renderLog(){
+  const entries=filterLog(logFilter);
+  const totalRev=entries.reduce((a,e)=>a+e.total,0);
+  const totalP=entries.reduce((a,e)=>a+(e.profitAmt||0),0);
+  document.getElementById('log-summary').innerHTML=`
+    <div><span style="font-size:11px;color:#8a9ba8">Revenue</span><br/><span style="font-size:15px;font-weight:bold;color:#74c69d">${fmt(totalRev)} UGX</span></div>
+    <div style="text-align:center"><span style="font-size:11px;color:#8a9ba8">Profit</span><br/><span style="font-size:15px;font-weight:bold;color:#52b788">${fmt(totalP)} UGX</span></div>
+    <div style="text-align:right"><span style="font-size:11px;color:#8a9ba8">Transactions</span><br/><span style="font-size:15px;font-weight:bold;color:#f2cc8f">${entries.length}</span></div>`;
+  if(!entries.length){document.getElementById('log-list').innerHTML='<div class="empty-state">No sales in this period</div>';return;}
+  const groups={};
+  entries.forEach(e=>{
+    const dk=new Date(e.ts).toLocaleDateString('en-GB',{weekday:'short',day:'2-digit',month:'short',year:'numeric'});
+    if(!groups[dk])groups[dk]=[];groups[dk].push(e);
+  });
+  document.getElementById('log-list').innerHTML=Object.entries(groups).map(([date,items])=>{
+    const dR=items.reduce((a,e)=>a+e.total,0);
+    const dP=items.reduce((a,e)=>a+(e.profitAmt||0),0);
+    return`<div class="date-hdr">📅 ${date} &nbsp;·&nbsp; ${fmt(dR)} UGX &nbsp;·&nbsp; +${fmt(dP)} profit</div>`+
+      items.map(e=>`<div class="log-entry">
+        <div style="display:flex;justify-content:space-between">
+          <span style="font-size:14px;color:#e8dcc8;font-weight:bold">${e.item}</span>
+          <span style="font-size:13px;color:#74c69d;font-weight:bold">+${fmt(e.total)} UGX</span>
+        </div>
+        <div style="font-size:11px;color:#8a9ba8;margin-top:4px">
+          ${e.qty} × ${fmt(e.price)} UGX · Profit: <span style="color:#52b788">+${fmt(e.profitAmt||0)}</span> · ${new Date(e.ts).toLocaleTimeString()}
+        </div>
+      </div>`).join('');
+  }).join('');
+}
+
+// ═══════════════════════════════════════════════════
+// LOSS / SPOILAGE
+// ═══════════════════════════════════════════════════
+function openLoss(id){
+  const s=stock.find(x=>x.id===id);if(!s)return;
+  const rem=s.totalItems-s.sold;
+  document.getElementById('loss-id').value=id;
+  document.getElementById('loss-qty').value='';
+  document.getElementById('loss-preview').style.display='none';
+  document.getElementById('loss-item-info').innerHTML=`<strong>${s.name}</strong><br/>Items remaining in stock: <strong>${rem}</strong> · Cost per item: <strong>${fmt(s.costPerItem)} UGX</strong>`;
+  document.getElementById('loss-modal').classList.remove('hidden');
+}
+function updateLossPreview(){
+  const id=parseInt(document.getElementById('loss-id').value);
+  const s=stock.find(x=>x.id===id);if(!s)return;
+  const qty=parseInt(document.getElementById('loss-qty').value)||0;
+  const el=document.getElementById('loss-preview');
+  if(qty>0){
+    const totalLoss=qty*s.costPerItem;
+    el.style.display='block';
+    el.innerHTML=`Items to remove: <strong>${qty}</strong><br/>Money lost: <strong style="color:#e07a5f">− ${fmt(totalLoss)} UGX</strong><br/>(${qty} items × ${fmt(s.costPerItem)} UGX cost)`;
+  }else{el.style.display='none';}
+}
+function closeLoss(){document.getElementById('loss-modal').classList.add('hidden');}
+function doLoss(){
+  const id=parseInt(document.getElementById('loss-id').value);
+  const s=stock.find(x=>x.id===id);if(!s)return;
+  const qty=parseInt(document.getElementById('loss-qty').value)||0;
+  const reason=document.getElementById('loss-reason').value;
+  if(!qty||qty<1)return toast('Enter how many items were lost','e');
+  const rem=s.totalItems-s.sold;
+  if(qty>rem)return toast('Only '+rem+' items remaining in stock','e');
+  const totalLoss=qty*s.costPerItem;
+  s.totalItems-=qty; // remove from stock permanently
+  losses.unshift({id:Date.now(),itemName:s.name,qty,costPerItem:s.costPerItem,totalLoss,reason,ts:new Date().toISOString()});
+  closeLoss();save();renderHeader();renderStock();
+  toast(qty+' × '+s.name+' recorded as loss (−'+fmt(totalLoss)+' UGX)','e');
+}
+
+// ═══════════════════════════════════════════════════
+// PRINT REPORT
+// ═══════════════════════════════════════════════════
+function printReport(){
+  const c=capitalStats();
+  const oh=totalOverhead();
+  const now=new Date().toLocaleString();
+  const todayE=filterLog('today');
+  const weekE=filterLog('week');
+  const monthE=filterLog('month');
+  const allE=filterLog('all');
+  const sumE=e=>({rev:e.reduce((a,x)=>a+x.total,0),profit:e.reduce((a,x)=>a+(x.profitAmt||0),0),tx:e.length});
+  const td=sumE(todayE),wk=sumE(weekE),mo=sumE(monthE),al=sumE(allE);
+  const grossPot=stock.reduce((a,s)=>a+(s.totalItems*(s.sellingPrice-s.costPerItem)),0);
+
+  const html=`<!DOCTYPE html><html><head><meta charset="UTF-8"/>
+  <title>Business Report — Patience Retail Store</title>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{font-family:Georgia,serif;color:#111;background:#fff;padding:24px;font-size:13px}
+    h1{font-size:22px;color:#1a4a34;margin-bottom:4px}
+    .subtitle{font-size:12px;color:#666;margin-bottom:20px}
+    h2{font-size:15px;color:#1a4a34;border-bottom:2px solid #2d6a4f;padding-bottom:5px;margin:18px 0 10px}
+    h3{font-size:13px;color:#333;margin:12px 0 6px}
+    .grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:6px}
+    .card{background:#f4f9f6;border:1px solid #c8e6d4;border-radius:8px;padding:10px 12px}
+    .card-val{font-size:18px;font-weight:bold;color:#1a4a34}
+    .card-lbl{font-size:11px;color:#666;margin-top:2px}
+    .card.red .card-val{color:#c0392b}
+    .card.yellow .card-val{color:#b7791f}
+    table{width:100%;border-collapse:collapse;margin-bottom:8px}
+    th{background:#1a4a34;color:#fff;padding:7px 10px;font-size:12px;text-align:left}
+    td{padding:6px 10px;border-bottom:1px solid #e0ede6;font-size:12px}
+    tr:nth-child(even) td{background:#f4f9f6}
+    .row{display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid #e8f0ec}
+    .row:last-child{border:none}
+    .lbl{color:#555}
+    .val{font-weight:bold}
+    .profit{color:#1a7a4a}
+    .loss{color:#c0392b}
+    .neutral{color:#b7791f}
+    .src-ext{color:#b7791f;font-weight:bold}
+    .src-int{color:#1a7a4a;font-weight:bold}
+    .footer{margin-top:24px;padding-top:10px;border-top:1px solid #ccc;font-size:11px;color:#888;text-align:center}
+    @media print{body{padding:12px}button{display:none}}
+  </style></head><body>
+  <button onclick="window.print()" style="float:right;padding:8px 20px;background:#1a4a34;color:#fff;border:none;border-radius:6px;font-size:13px;cursor:pointer;font-family:Georgia,serif">🖨️ Print / Save PDF</button>
+  <h1>🏪 Patience Retail Store</h1>
+  <div class="subtitle">Business Status Report &nbsp;·&nbsp; Generated: ${now}</div>
+
+  <h2>💼 Capital &amp; Cash Overview</h2>
+  <div class="grid2">
+    <div class="card yellow"><div class="card-val">${fmt(c.totalExternal)} UGX</div><div class="card-lbl">💰 External Capital Invested</div></div>
+    <div class="card"><div class="card-val">${fmt(c.cashInHand)} UGX</div><div class="card-lbl">💵 Cash in Hand</div></div>
+    <div class="card"><div class="card-val">${fmt(c.stockValue)} UGX</div><div class="card-lbl">📦 Current Stock Value</div></div>
+    <div class="card"><div class="card-val">${fmt(c.totalWorth)} UGX</div><div class="card-lbl">🏪 Total Business Worth</div></div>
+    <div class="card"><div class="card-val">${fmt(c.totalRevenue)} UGX</div><div class="card-lbl">📈 Total Revenue Earned</div></div>
+    <div class="card ${c.netProfit>=0?'':'red'}"><div class="card-val ${c.netProfit>=0?'profit':'loss'}">${c.netProfit>=0?'+':''}${fmt(c.netProfit)} UGX</div><div class="card-lbl">📊 Net Profit</div></div>
+  </div>
+  <div style="background:#fff8e1;border:1px solid #f0d060;border-radius:6px;padding:8px 12px;font-size:12px;color:#7a5c00;margin-bottom:4px">
+    Net Profit = Total Business Worth (${fmt(c.totalWorth)}) − External Capital Invested (${fmt(c.totalExternal)})
+  </div>
+
+  <h2>📊 Sales Summary</h2>
+  <table>
+    <tr><th>Period</th><th>Revenue (UGX)</th><th>Profit (UGX)</th><th>Transactions</th></tr>
+    <tr><td>Today</td><td>${fmt(td.rev)}</td><td class="${td.profit>=0?'profit':'loss'}">${fmt(td.profit)}</td><td>${td.tx}</td></tr>
+    <tr><td>This Week</td><td>${fmt(wk.rev)}</td><td class="${wk.profit>=0?'profit':'loss'}">${fmt(wk.profit)}</td><td>${wk.tx}</td></tr>
+    <tr><td>This Month</td><td>${fmt(mo.rev)}</td><td class="${mo.profit>=0?'profit':'loss'}">${fmt(mo.profit)}</td><td>${mo.tx}</td></tr>
+    <tr><td>All Time</td><td>${fmt(al.rev)}</td><td class="${al.profit>=0?'profit':'loss'}">${fmt(al.profit)}</td><td>${al.tx}</td></tr>
+  </table>
+
+  <h2>📦 Stock Status</h2>
+  <table>
+    <tr><th>Item</th><th>In Stock</th><th>Sold</th><th>Remaining</th><th>Cost/Item</th><th>Sell Price</th><th>Profit/Item</th><th>Value</th></tr>
+    ${stock.map(s=>{
+      const rem=s.totalItems-s.sold;
+      const pip=s.sellingPrice-s.costPerItem;
+      return`<tr><td><strong>${s.name}</strong></td><td>${s.totalItems}</td><td>${s.sold}</td>
+        <td style="color:${rem===0?'#c0392b':rem<=Math.ceil(s.totalItems*.2)?'#b7791f':'#1a7a4a'}">${rem}${rem===0?' ⚠️':''}</td>
+        <td>${fmt(s.costPerItem)}</td><td>${fmt(s.sellingPrice)}</td>
+        <td class="${pip>=0?'profit':'loss'}">${pip>=0?'+':''}${fmt(pip)}</td>
+        <td>${fmt(rem*s.costPerItem)}</td></tr>`;
+    }).join('')}
+    <tr style="background:#f4f9f6;font-weight:bold"><td>TOTAL</td><td>${stock.reduce((a,s)=>a+s.totalItems,0)}</td><td>${stock.reduce((a,s)=>a+s.sold,0)}</td>
+      <td>${stock.reduce((a,s)=>a+(s.totalItems-s.sold),0)}</td><td>—</td><td>—</td>
+      <td class="profit">+${fmt(grossPot)}</td><td>${fmt(c.stockValue)}</td></tr>
+  </table>
+
+  <h2>🏠 Monthly Expenses</h2>
+  <table>
+    <tr><th>Expense</th><th>Monthly Amount (UGX)</th></tr>
+    ${expenses.map(e=>`<tr><td>${e.name}</td><td>${fmt(e.amount)}</td></tr>`).join('')}
+    <tr style="font-weight:bold;background:#f4f9f6"><td>TOTAL</td><td>${fmt(oh)}</td></tr>
+  </table>
+  <div style="font-size:12px;color:#555;margin-top:4px">
+    Break-even: need <strong>${Math.ceil(oh/Math.max(grossPot,1))} restock cycle(s)/month</strong> to cover expenses.
+    Net per cycle after expenses: <strong class="${grossPot-oh>=0?'profit':'loss'}">${fmt(grossPot-oh)} UGX</strong>
+  </div>
+
+  <h2>📋 Purchase History (Capital Source)</h2>
+  <table>
+    <tr><th>Item</th><th>Qty</th><th>Cost/Item</th><th>Total Cost</th><th>Source</th><th>Date</th></tr>
+    ${purchases.slice(0,20).map(p=>`<tr>
+      <td>${p.itemName}</td><td>${p.qty||'—'}</td><td>${p.costPerItem?fmt(p.costPerItem):'—'}</td>
+      <td><strong>${fmt(p.totalCost)} UGX</strong></td>
+      <td class="${p.source==='external'?'src-ext':'src-int'}">${p.source==='external'?'💰 New Money':'💵 Revenue'}</td>
+      <td>${new Date(p.ts).toLocaleDateString()}</td>
+    </tr>`).join('')}
+  </table>
+  ${purchases.length>20?`<div style="font-size:11px;color:#888;text-align:center">Showing latest 20 of ${purchases.length} purchases</div>`:''}
+
+  <div class="footer">Patience Retail Store &nbsp;·&nbsp; Report generated ${now} &nbsp;·&nbsp; All amounts in Uganda Shillings (UGX)</div>
+  </body></html>`;
+
+  const w=window.open('','_blank','width=800,height=900');
+  w.document.write(html);
+  w.document.close();
+}
+
+// ═══════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════
+load();
+renderHeader();
+renderStock();
+</script>
+</body>
+</html>
